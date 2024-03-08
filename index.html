@@ -2,28 +2,15 @@
     <head>
         <title>Chess Clock</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff">
-        <link rel="manifest" href="/manifest.json">
-        <link rel="stylesheet" href="./style.css">
-        <style>
-        #install-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 100;
-        }
-        </style>
+        <meta name="theme-color" content="#000000" />
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/x-icon" href="./icon.png">
+        <link rel="manifest" href="./manifest.json" />
+        <!-- ios support -->
+        <link rel="apple-touch-icon" href="./icon.png" />
+        <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
     </head>
     <body>
-        <div id="install-banner">
-            Install this app!
-        </div>
         <div class="scrn" id="main">
             <div class="bgDiv" id="p1Div" style="rotate: 180deg; top: 0%;">
                 Player 1

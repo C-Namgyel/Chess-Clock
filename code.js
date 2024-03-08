@@ -1,33 +1,52 @@
-// Service worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('Service worker registered.', reg))
-      .catch((error) => console.error('Service worker registration failed.', error));
+// Service Worker
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker
+        .register("/serviceWorker.js")
+        .then(res => console.log("service worker registered"))
+        .catch(err => console.log("service worker not registered", err))
+    })
 }
+
+// App installer
 var deferredPrompt;
+
+// Listen for the 'beforeinstallprompt' event
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    // Show your custom install banner
-    document.getElementById('install-banner').style.display = 'block';
-});
-document.getElementById('install-banner').addEventListener('click', () => {
-    console.log(deferredPrompt)
-    // Trigger the install prompt
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            } else {
-                console.log('User dismissed the install prompt');
-            }
-            // Reset the deferredPrompt variable
-            deferredPrompt = null;
-        });
+    let installBanner = document.createElement("div");
+    installBanner.style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: black; color: white; padding-top: 5%; padding-bottom: 5%; text-align: center; z-index: 1000;";
+    let img = document.createElement("img");
+    img.src = "./icon.png";
+    img.style = "height: 12vw; vertical-align: middle;";
+    img.alt = "Chess Clock";
+    let span = document.createElement("span");
+    span.style = "margin-left: 10px; font-size: 5vw;";
+    span.innerHTML = "Install Chess Clock";
+    let installButton = document.createElement("button");
+    installButton.style = "margin-left: 10px; background-color: white; color: #0989EC; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; font-size: 3vw;";
+    installButton.innerHTML = "Install";
+    let closeButton = document.createElement("button");
+    closeButton.style = "background-color: transparent; color: white; border: none; cursor: pointer; position: absolute; top: 5px; right: 0%; background-color: red; font-size: 3vw;";
+    closeButton.innerHTML = "&times;";
+    installBanner.appendChild(img);
+    installBanner.appendChild(span);
+    installBanner.appendChild(installButton);
+    installBanner.appendChild(closeButton);
+    document.body.appendChild(installBanner);
+    installButton.onclick = function() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    closeButton.click();
+                }
+                deferredPrompt = null;
+            });
+        }
+    };
+    closeButton.onclick = function() {
+        installBanner.remove();
     }
 });
 
